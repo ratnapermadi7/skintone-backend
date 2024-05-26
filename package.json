@@ -1,17 +1,22 @@
 {
-  "name": "skintone-be",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "@hapi/hapi": "^21.3.9",
-    "@hapi/jwt": "^3.2.0",
-    "dotenv": "^16.4.5"
-  }
+    "name": "shades-api",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start:dev": "nodemon ./server.js",
+        "start": "node ./server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@google-cloud/firestore": "^7.1.0",
+        "@hapi/hapi": "^21.3.2",
+        "@hapi/joi": "^17.1.1",
+        "dotenv": "^16.3.1"
+    },
+    "devDependencies": {
+        "nodemon": "^3.0.2"
+    }
 }
