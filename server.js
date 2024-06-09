@@ -2,9 +2,16 @@
 
 const Hapi = require('@hapi/hapi');
 const { Firestore } = require('@google-cloud/firestore');
+const admin = require('firebase-admin');
+const HapiJwt = require('hapi-auth-jwt2');
+
 require('dotenv').config();
 
-const firestore = new Firestore();
+// Initialize Firebase Admin SDK with appropriate credentials
+const firestore = new Firestore({
+  projectId: 'skintone-be-424507',
+  keyFilename: './serviceaccountkey.json' // Path to the service account key JSON file
+});
 
 const init = async () => {
   const server = Hapi.server({
@@ -12,7 +19,19 @@ const init = async () => {
     host: process.env.HOST || '0.0.0.0'
   });
 
-  // Register routes
+  // Register JWT authentication plugin
+  await server.register(HapiJwt);
+
+  // Define JWT authentication strategy
+  server.auth.strategy('jwt', 'jwt', {
+    key: process.env.JWT_SECRET,
+    validate: async (decoded, request, h) => {
+      // Implement validation logic here, e.g., check if user exists in Firestore
+      return { isValid: true, credentials: decoded };
+    }
+  });
+
+  // Add routes
   await server.register([
     {
       plugin: require('./routes/shades'),
