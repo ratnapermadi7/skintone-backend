@@ -1,6 +1,7 @@
 'use strict';
 
 const Joi = require('@hapi/joi');
+// const HapiJWT = require('@hapi/jwt');
 
 exports.plugin = {
   name: 'shadesRoutes',
@@ -9,21 +10,14 @@ exports.plugin = {
     const firestore = options.firestore;
 
     // Endpoint to get all foundation shades
-    // server.route({
-    //   method: 'GET',
-    //   path: '/api/shades',
-    //   handler: async (request, h) => {
-    //     try {
-    //       const shadesRef = firestore.collection('shades');
-    //       const snapshot = await shadesRef.get();
-    //       const shades = snapshot.docs.map(doc => doc.data());
-    //       return h.response(shades).code(200);
-    //     } catch (error) {
-    //       console.error(error);
-    //       return h.response({ error: 'Internal Server Error' }).code(500);
-    //     }
-    //   }
-    // });
+    server.route({
+      method: 'GET',
+      path: '/',
+      handler: (request, h) => {
+        return h.response('Welcome to Skintone API').code(200);
+      }
+    });
+    
 
       server.route({
       method: 'GET',
@@ -104,6 +98,7 @@ exports.plugin = {
       method: 'POST',
       path: '/api/shades',
       options: {
+        auth: 'jwt',
         validate: {
           payload: Joi.array().items(
             Joi.object({
@@ -135,6 +130,7 @@ exports.plugin = {
       method: 'PUT',
       path: '/api/shades/{shadeId}',
       options: {
+        auth: 'jwt',
         validate: {
           payload: Joi.object({
             description: Joi.string().required(),
@@ -144,6 +140,7 @@ exports.plugin = {
             recommended_brands: Joi.array().items(Joi.string()).required()
           })
         }
+        
       },
       handler: async (request, h) => {
         try {
@@ -178,6 +175,9 @@ exports.plugin = {
     server.route({
       method: 'DELETE',
       path: '/api/shades/{shadeId}',
+      options:{
+        auth: 'jwt',
+      },
       handler: async (request, h) => {
         try {
           const shadeId = request.params.shadeId;
